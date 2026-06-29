@@ -1,6 +1,3 @@
-bash
-
-cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -56,19 +53,36 @@ body { background: var(--bg); color: var(--text); font-family: var(--font); min-
 .service-icon { width: 40px; height: 40px; background: var(--accent-glow); border: 1px solid rgba(46,111,255,0.25); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; font-size: 1.2rem; }
 .service-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
 .service-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
-.projects-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.project-item { background: var(--surface); padding: 1.5rem 1.75rem; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
-.project-item:hover { background: var(--surface2); }
-.project-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
-.project-info p { font-size: 0.85rem; color: var(--muted); }
+
+/* PROJETS */
+.projects-list { display: flex; flex-direction: column; gap: 1.5rem; }
+.project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s; }
+.project-card:hover { border-color: rgba(46,111,255,0.35); }
+.project-gallery { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 180px 120px; gap: 3px; background: #000; }
+.project-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.2s; cursor: pointer; }
+.project-gallery img:hover { opacity: 0.85; }
+.project-gallery img:first-child { grid-row: 1 / 3; }
+.project-gallery img:nth-child(2) { grid-column: 2; grid-row: 1; }
+.project-gallery img:nth-child(3) { grid-column: 3; grid-row: 1; }
+.project-gallery img:nth-child(4) { grid-column: 2; grid-row: 2; }
+.project-gallery img:nth-child(5) { grid-column: 3; grid-row: 2; }
+.project-info-bar { padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.project-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; }
+.project-desc { font-size: 0.83rem; color: var(--muted); }
 .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .tag { padding: 0.25rem 0.75rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; font-size: 0.75rem; color: var(--muted); }
 .tag.accent { background: var(--accent-glow); border-color: rgba(46,111,255,0.3); color: var(--accent-light); }
-.arrow { color: var(--accent); font-size: 1.2rem; margin-left: 1rem; flex-shrink: 0; }
+
+/* Galerie modale */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 999; align-items: center; justify-content: center; }
+.modal.open { display: flex; }
+.modal img { max-width: 90vw; max-height: 90vh; border-radius: 8px; object-fit: contain; }
+.modal-close { position: fixed; top: 1.5rem; right: 1.5rem; color: white; font-size: 2rem; cursor: pointer; background: none; border: none; }
+
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .about-text p { color: var(--muted); line-height: 1.85; margin-bottom: 1.1rem; font-size: 0.95rem; }
 .about-text p strong { color: var(--accent-light); font-weight: 700; }
-.quote-block { border-left: 3px solid var(--accent); margin: 1.5rem 0; background: var(--accent-glow); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; }
+.quote-block { margin: 1.5rem 0; background: var(--accent-glow); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; }
 .quote-block p { color: var(--text); font-size: 1rem; font-style: italic; line-height: 1.7; }
 .stats { display: flex; flex-direction: column; gap: 1rem; }
 .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; transition: border-color 0.2s; }
@@ -93,10 +107,31 @@ body { background: var(--bg); color: var(--text); font-family: var(--font); min-
 .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
 .footer { padding: 2rem 2.5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; }
 .footer span { font-size: 0.8rem; color: var(--muted); }
-@media(max-width:600px) { .about-grid{grid-template-columns:1fr} .project-item{flex-direction:column;align-items:flex-start;gap:1rem} .nav-links{display:none} }
+@media(max-width:600px) {
+  .about-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .project-gallery { grid-template-columns: 1fr 1fr; grid-template-rows: 160px 120px 120px; }
+  .project-gallery img:first-child { grid-column: 1 / 3; grid-row: 1; }
+  .project-gallery img:nth-child(2) { grid-column: 1; grid-row: 2; }
+  .project-gallery img:nth-child(3) { grid-column: 2; grid-row: 2; }
+  .project-gallery img:nth-child(4) { grid-column: 1; grid-row: 3; }
+  .project-gallery img:nth-child(5) { grid-column: 2; grid-row: 3; }
+}
 </style>
 </head>
 <body>
+
+<!-- Modale image -->
+<div class="modal" id="modal" onclick="this.classList.remove('open')">
+  <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
+  <img id="modal-img" src="" alt="">
+</div>
+<script>
+function openModal(src) {
+  document.getElementById('modal-img').src = src;
+  document.getElementById('modal').classList.add('open');
+}
+</script>
 
 <nav class="nav">
   <div class="logo">Gek'sØt</div>
@@ -156,36 +191,63 @@ body { background: var(--bg); color: var(--text); font-family: var(--font); min-
   <div class="section-label">Réalisations</div>
   <h2>Projets</h2>
   <div class="projects-list">
-    <div class="project-item">
-      <div class="project-info">
-        <h3>Projet 01 — À compléter</h3>
-        <p>Description de ton projet phare</p>
+
+    <!-- PROJET 1 : VSA -->
+    <div class="project-card">
+      <div class="project-gallery">
+        <img src="Capture_d_écran_2026-06-29_000549.png" alt="VSA Lobby" onclick="openModal(this.src)">
+        <img src="Capture_d_écran_2026-06-29_000634.png" alt="VSA Shop" onclick="openModal(this.src)">
+        <img src="Capture_d_écran_2026-06-29_000703.png" alt="VSA 1V1-5V5" onclick="openModal(this.src)">
+        <img src="Capture_d_écran_2026-06-29_000557.png" alt="VSA Stand de tir" onclick="openModal(this.src)">
+        <img src="Capture_d_écran_2026-06-29_000718.png" alt="VSA Arene" onclick="openModal(this.src)">
       </div>
-      <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0">
-        <div class="project-tags"><span class="tag accent">Roblox</span><span class="tag">2024</span></div>
-        <div class="arrow">→</div>
-      </div>
-    </div>
-    <div class="project-item">
-      <div class="project-info">
-        <h3>Projet 02 — À compléter</h3>
-        <p>Description d'un autre projet</p>
-      </div>
-      <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0">
-        <div class="project-tags"><span class="tag accent">Builder</span><span class="tag">2024</span></div>
-        <div class="arrow">→</div>
-      </div>
-    </div>
-    <div class="project-item">
-      <div class="project-info">
-        <h3>Projet 03 — À compléter</h3>
-        <p>Description d'un événement ou live</p>
-      </div>
-      <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0">
-        <div class="project-tags"><span class="tag accent">Animation</span><span class="tag">2025</span></div>
-        <div class="arrow">→</div>
+      <div class="project-info-bar">
+        <div>
+          <div class="project-title">VSA — Warfare Sniper Arena</div>
+          <div class="project-desc">Jeu de sniper compétitif — lobby, shop, stand de tir, arènes 1V1 à 5V5</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag accent">Roblox</span>
+          <span class="tag accent">Builder</span>
+          <span class="tag">2025</span>
+        </div>
       </div>
     </div>
+
+    <!-- PROJET 2 : placeholder -->
+    <div class="project-card">
+      <div style="height:120px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.9rem;">
+        📸 Ajoute les photos de ton projet 2
+      </div>
+      <div class="project-info-bar">
+        <div>
+          <div class="project-title">Projet 02 — À compléter</div>
+          <div class="project-desc">Description de ton deuxième projet</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag accent">Builder</span>
+          <span class="tag">2024</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJET 3 : placeholder -->
+    <div class="project-card">
+      <div style="height:120px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.9rem;">
+        📸 Ajoute les photos de ton projet 3
+      </div>
+      <div class="project-info-bar">
+        <div>
+          <div class="project-title">Projet 03 — À compléter</div>
+          <div class="project-desc">Description de ton troisième projet</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag accent">Animation</span>
+          <span class="tag">2025</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -246,7 +308,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font); min-
     <div class="contact-links">
       <a class="btn btn-roblox" href="https://www.roblox.com/users/search?keyword=bbmalade12" target="_blank">🎮 Roblox @bbmalade12</a>
       <a class="btn btn-discord" href="https://discord.com/users/geks0t" target="_blank">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.030z"/></svg>
         Discord @geks0t
       </a>
     </div>
